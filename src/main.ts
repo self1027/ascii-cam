@@ -84,6 +84,19 @@ function renderLoop() {
     if (worker.lastResult) {
       drawASCII(ctx, worker.lastResult, metrics, config);
     }
+
+    const endTime = performance.now();
+    gridInfo.textContent = `${metrics.cols}×${metrics.rows} grid`;
+    charInfo.textContent = `${config.chars.length} variants`;
+    msInfo.textContent = `${(endTime - startTime).toFixed(1)}ms`;
+
+    frameCount++;
+    const now = performance.now();
+    if (now >= lastTime + 1000) {
+      fpsInfo.textContent = `${frameCount} fps`;
+      frameCount = 0;
+      lastTime = now;
+    }
   } else {
     ctx.fillStyle = config.textColor;
     ctx.font = `14px monospace`;
@@ -98,23 +111,50 @@ function renderLoop() {
     
     ctx.textAlign = "start";
     ctx.textBaseline = "top";
-  }
 
-  const endTime = performance.now();
-  gridInfo.textContent = `${metrics.cols}×${metrics.rows} grid`;
-  charInfo.textContent = `${config.chars.length} variants`;
-  msInfo.textContent = `${(endTime - startTime).toFixed(1)}ms`;
-
-  frameCount++;
-  const now = performance.now();
-  if (now >= lastTime + 1000) {
-    fpsInfo.textContent = `${frameCount} fps`;
+    gridInfo.textContent = "0×0 grid";
+    charInfo.textContent = "0 variants";
+    msInfo.textContent = "0.0ms";
+    fpsInfo.textContent = "0 fps";
     frameCount = 0;
-    lastTime = now;
   }
 
   requestAnimationFrame(renderLoop);
 }
+
+charInput.oninput = () => config.chars = charInput.value;
+textColorInput.oninput = () => config.textColor = textColorInput.value;
+bgColorInput.oninput = () => config.bgColor = bgColorInput.value;
+
+fontRange.oninput = () => {
+  config.fontSize = parseInt(fontRange.value);
+  fontVal.textContent = fontRange.value;
+};
+
+contrastRange.oninput = () => {
+  config.contrast = parseFloat(contrastRange.value);
+  contrastVal.textContent = contrastRange.value;
+};
+
+brightRange.oninput = () => {
+  config.brightness = parseFloat(brightRange.value);
+  brightVal.textContent = brightRange.value;
+};
+
+colorBtn.onclick = () => {
+  setUseColor(!useColor);
+  updateColorModeUI();
+};
+
+btn.onclick = async () => {
+  if (camera.stream) {
+    camera.stop();
+    btn.textContent = "START CAMERA";
+  } else {
+    const success = await camera.start();
+    if (success) btn.textContent = "STOP CAMERA";
+  }
+};
 
 charInput.oninput = () => config.chars = charInput.value;
 textColorInput.oninput = () => config.textColor = textColorInput.value;
