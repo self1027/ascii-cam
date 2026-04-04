@@ -6,7 +6,7 @@ Converte sua webcam em arte ASCII em tempo real diretamente no navegador, utiliz
 
 ## Demo
 
-https://aindanaotem.com
+https://ascii.murilod.dev/
 
 ---
 
