@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ASCII Webcam Pretext</title>
+  <link rel="stylesheet" href="./src/styles/main.css">
+</head>
+<body>
+  <div id="app-container">
+    <div id="canvas-wrap">
+      <canvas id="canvas"></canvas>
+    </div>
+
+    <aside id="sidebar">
+      <h2>ASCII CONFIG</h2>
+      
+      <div class="control-group">
+        <label>CARACTERES</label>
+        <input type="text" id="chars-input" value="@#S%?*+;:-. ">
+      </div>
+
+      <div class="control-group">
+        <label>FONTE: <span id="font-val">9</span>px</label>
+        <input type="range" id="font-range" min="5" max="25" value="9">
+      </div>
+
+      <div class="control-group">
+        <label>CONTRASTE: <span id="contrast-val">1</span></label>
+        <input type="range" id="contrast-range" min="0.5" max="3" step="0.1" value="1">
+      </div>
+
+      <div class="control-group">
+        <label>BRILHO: <span id="bright-val">1</span></label>
+        <input type="range" id="bright-range" min="0" max="2" step="0.1" value="1">
+      </div>
+
+      <div class="control-group">
+        <label>Modo de Exibição</label>
+        <button id="color-toggle" class="btn-sidebar">COLOR: OFF</button>
+      </div>
+
+      <div class="control-group" id="group-text-color">
+        <label>COR DO TEXTO</label>
+        <input type="color" id="text-color" value="#00ff88">
+      </div>
+
+      <div class="control-group" id="group-bg-color">
+        <label>COR DO FUNDO</label>
+        <input type="color" id="bg-color" value="#000000">
+      </div>
+
+      <hr>
+
+      <div class="socials">
+        <h3>SOCIALS</h3>
+        <a href="https://linkedin.com" target="_blank">LinkedIn</a>
+        <a href="https://github" target="_blank">GitHub</a>
+        <a href="https://portfolio" target="_blank">Portfolio</a>
+      </div>
+
+      <button id="toggle">STOP CAMERA</button>
+
+      <div id="stats-panel" style="font-family: monospace; font-size: 10px; color: #00ff8888; border: 1px solid #00ff8833; padding: 10px; background: #000;">
+        <div id="grid-info">0x0 grid</div>
+        <div id="char-info">0 character variants</div>
+        <div id="fps-info">0 fps</div>
+        <div id="ms-info">rendered in 0ms</div>
+      </div>
+      <div style="margin-top: 10px; font-size: 10px; text-align: center; color: #00ff8855; border-top: 1px solid #00ff8822; padding-top: 10px;">
+        DESENVOLVIDO POR <br>
+        <strong style="color: #00ff88; letter-spacing: 1px;">MURILO D.</strong>
+      </div>
+    </aside>
+  </div>
+  <script type="module" src="./src/main.ts"></script>
+</body>
+</html>
