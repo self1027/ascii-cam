@@ -118,13 +118,6 @@ hr { border: 0; border-top: 1px solid #00ff8833; margin: 10px 0; }
     filter: grayscale(1);
 }
 
-#app-container {
-  display: flex;
-  flex-direction: row;
-  width: 100vw;
-  height: 100vh;
-}
-
 #sidebar {
   width: 320px;
   overflow-y: auto;
