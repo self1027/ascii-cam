@@ -1,20 +1,25 @@
-import { type Config, useColor } from '../core/config';
+
+import type { Config } from '../core/config';
+import type { LayoutMetrics, ASCIIResult } from '../types';
 
 const colorCache = new Map<number, string>();
 
 export function drawASCII(
-  ctx: CanvasRenderingContext2D, 
-  result: { charIndices: Uint8Array, colors: Uint32Array },
-  metrics: any,
-  config: Config
+  ctx: CanvasRenderingContext2D,
+  result: ASCIIResult,
+  metrics: LayoutMetrics,
+  config: Config,
+  useColor: boolean
 ) {
   const { cols, rows, screenW, charWidth } = metrics;
   const { charIndices, colors } = result;
-  const offsetX = (screenW - (cols * charWidth)) / 2;
+
+  const offsetX = (screenW - cols * charWidth) / 2;
   let y = 0;
 
-  if (!useColor) {
+  if (!useColor || !colors) {
     ctx.fillStyle = config.textColor;
+
     for (let row = 0; row < rows; row++) {
       let line = "";
       for (let col = 0; col < cols; col++) {
@@ -23,37 +28,42 @@ export function drawASCII(
       ctx.fillText(line, offsetX, y);
       y += config.fontSize;
     }
-  } else {
-    for (let row = 0; row < rows; row++) {
-      let x = offsetX;
-      let currentColor = -1;
-      let bufferStr = "";
+    return;
+  }
 
-      for (let col = 0; col < cols; col++) {
-        const i = row * cols + col;
-        const char = config.chars[charIndices[i]];
-        const color = colors[i];
+  for (let row = 0; row < rows; row++) {
+    let x = offsetX;
+    let currentColor = -1;
+    let buffer = "";
 
-        if (color !== currentColor && bufferStr.length > 0) {
-          ctx.fillStyle = colorCache.get(currentColor)!;
-          ctx.fillText(bufferStr, x - bufferStr.length * charWidth, y);
-          bufferStr = "";
-        }
+    for (let col = 0; col < cols; col++) {
+      const i = row * cols + col;
+      const char = config.chars[charIndices[i]];
+      const color = colors[i];
 
-        if (!colorCache.has(color)) {
-          colorCache.set(color, `rgb(${(color >> 16) & 255},${(color >> 8) & 255},${color & 255})`);
-        }
-
-        currentColor = color;
-        bufferStr += char;
-        x += charWidth;
-      }
-
-      if (bufferStr.length > 0) {
+      if (color !== currentColor && buffer.length) {
         ctx.fillStyle = colorCache.get(currentColor)!;
-        ctx.fillText(bufferStr, x - bufferStr.length * charWidth, y);
+        ctx.fillText(buffer, x - buffer.length * charWidth, y);
+        buffer = "";
       }
-      y += config.fontSize;
+
+      if (!colorCache.has(color)) {
+        colorCache.set(
+          color,
+          `rgb(${(color >> 16) & 255},${(color >> 8) & 255},${color & 255})`
+        );
+      }
+
+      currentColor = color;
+      buffer += char;
+      x += charWidth;
     }
+
+    if (buffer.length) {
+      ctx.fillStyle = colorCache.get(currentColor)!;
+      ctx.fillText(buffer, x - buffer.length * charWidth, y);
+    }
+
+    y += config.fontSize;
   }
 }

@@ -5,6 +5,7 @@ export interface Config {
   brightness: number;
   textColor: string;
   bgColor: string;
+  useColor: boolean; // 👈 aqui
 }
 
 export const config: Config = {
@@ -13,8 +14,6 @@ export const config: Config = {
   contrast: 1,
   brightness: 1,
   textColor: "#00ff88",
-  bgColor: "#000000"
+  bgColor: "#000000",
+  useColor: false
 };
-
-export let useColor = false;
-export const setUseColor = (val: boolean) => useColor = val;
